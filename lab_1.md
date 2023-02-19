@@ -14,7 +14,7 @@ void Search(int s, int n, int* arr) {
 }
 ```
 
-\
+---
 2. Проанализируем работу алгоритма для наихудшего случая
 
 Полный код:
@@ -69,7 +69,7 @@ int main() {
 }
 ```
 
-\
+---
 3. Построим график зависимости времени выполнения алгоритма от размера массива
 ```python
 import matplotlib.pyplot as plt
@@ -92,7 +92,63 @@ plt.scatter(x, y, s=1)
 print(k, b)
 plt.show()
 ```
+![](https://github.com/Erykalkin/MIPT_labs/blob/main/image.png)
+
+Видим, что точки действительно ложатся на прямую, сложность алгоритма O(N)
 
 k = 2 $\Rightarrow$ время работы одной операции примерно равно 2 наносекундам.
 
-![][https://github.com/Erykalkin/MIPT_labs/blob/main/image.png]
+---
+4. Проанализируем работу алгоритма для случайных чисел
+
+Код:
+```C++
+#include <iostream>
+#include <chrono>
+#include <random>
+#include <fstream>
+
+
+void FillWithRandomValues(int n, int* arr) {
+    std::mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
+    for (int i = 0; i < n; ++i){
+        arr[i] = rnd() % 1'000'000 + 1;
+    }
+}
+
+
+void Search(int s, int n, int* arr) {
+    int i = 0;
+    while (i < n && arr[i] != s) {
+        ++i;
+    }
+}
+
+
+int main() {
+    std::ofstream f("1.csv", std::ios::out);
+    f << 0 << std::endl; // np считает первый элемент столбца его заголовком
+    for (unsigned size = 1000; size <= 1'000'000; size += 1000) {
+        std::mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
+        auto time_span = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - std::chrono::steady_clock::now());
+        for (unsigned test = 1; test <= 100; ++test) {
+            srand(time(NULL));
+
+            int s = rnd() % 1'000'000 + 1; // number to search
+            int* arr = new int[size];
+
+            FillWithRandomValues(size, arr);
+
+            auto begin = std::chrono::steady_clock::now();
+            Search(s, size, arr);
+            auto end = std::chrono::steady_clock::now();
+
+            time_span += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+
+            delete(arr);
+        }
+        f << time_span.count() / 100 << std::endl;
+    }
+    return 0;
+}
+```
