@@ -92,7 +92,7 @@ plt.scatter(x, y, s=1)
 print(k, b)
 plt.show()
 ```
-![](https://github.com/Erykalkin/MIPT_labs/blob/main/image.png)
+![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_1/image.png)
 
 Видим, что точки действительно ложатся на прямую, сложность алгоритма O(N)
 
