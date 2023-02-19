@@ -95,4 +95,4 @@ plt.show()
 
 k = 2 $\Rightarrow$ время работы одной операции примерно равно 2 наносекундам.
 
-!
+![][https://github.com/Erykalkin/MIPT_labs/blob/main/image.png]
