@@ -179,7 +179,7 @@ void BinarySearch(int s, int* arr, int begin, int end) {
 ```
 
 ---
-2. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для наихудшего случая
+2. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для наихудшего случая (ищем $+\infty$) и построим график зависимости времени выполнения алгоритма от размера массива
 
 Полный код:
 ```C++
@@ -234,6 +234,74 @@ int main() {
 ```
 
 ---
-3. Построим график зависимости времени выполнения алгоритма от размера массива
 
-![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_1/image3.png)
+Видим, что время работы алгоритма пропорционально целой части двоичного логарифма от размера массива.
+
+3. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для наихудшего случая (ищем $-\infty$ или 0) и построим график зависимости времени выполнения алгоритма от размера массива
+
+![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_1/image4.png)
+
+Видим, что время работы алгоритма пропорционально целой части двоичного логарифма от размера массива.
+
+В итоге имеем 2 границы, в пределах которых должны лежать точки при работе алгоритма на случайных числах, что можем проверить при поиске константы, например при ```s = 500'000``` имеем
+
+![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_1/image5.png)
+
+Видим, что точки до размера массива 500'000 прижаты к нижней границе, так как ```s = 500'000``` для массивов размером меньше 500'000 является +$\infty$, затем точки с некоторой переодичностью находятся в пределах верхней и нижней границ.
+
+4. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для случайного числа, принадлежащему массиву (число генерируется в каждом тесте) и построим график
+
+Полный код:
+```C++
+#include <iostream>
+#include <chrono>
+#include <random>
+#include <fstream>
+
+
+void FillWithOrderedValues(int n, int* arr) {
+    for (int i = 1; i <= n; ++i){
+        arr[i] = i;
+    }
+}
+
+
+void BinarySearch(int s, int* arr, int begin, int end) {
+    while (end - begin > 1) {
+        int m = (begin + end) / 2;
+        if (arr[m] < s) {
+            begin = m;
+        } else {
+            end = m;
+        }
+    }
+}
+
+
+int main() {
+    std::ofstream f("1.csv", std::ios::out);
+    f << 0 << std::endl; // np считает первый элемент столбца его заголовком
+
+    int* arr = new int[1000000];
+    FillWithOrderedValues(1000000, arr);
+    int s = 100000000;
+
+    for (unsigned size = 1000; size <= 1000000; size += 1000) {
+        std::mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
+        auto time_span = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - std::chrono::steady_clock::now());
+        srand(time(NULL));
+        for (unsigned test = 1; test <= 100000; ++test) {
+        
+            s = rnd() % 1'000'000 + 1; // number to search
+
+            auto begin = std::chrono::steady_clock::now();
+            BinarySearch(s, arr, 0, size - 1);
+            auto end = std::chrono::steady_clock::now();
+
+            time_span += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+        }
+        f << time_span.count() / 100000 << std::endl;
+    }
+    return 0;
+}
+```
