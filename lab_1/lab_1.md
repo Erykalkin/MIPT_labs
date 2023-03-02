@@ -233,10 +233,9 @@ int main() {
 }
 ```
 
----
-
 Видим, что время работы алгоритма пропорционально целой части двоичного логарифма от размера массива.
 
+---
 3. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для наихудшего случая (ищем $-\infty$ или 0) и построим график зависимости времени выполнения алгоритма от размера массива
 
 ![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_1/image4.png)
@@ -247,9 +246,10 @@ int main() {
 
 ![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_1/image5.png)
 
-Видим, что точки до размера массива 500'000 прижаты к нижней границе, так как ```s = 500'000``` для массивов размером меньше 500'000 является +$\infty$, затем точки с некоторой переодичностью находятся в пределах верхней и нижней границ.
+Видим, что точки до размера массива 500'000 прижаты к нижней границе, так как ```s = 500'000``` для массивов размером меньше 500'000 является $+\infty$, затем точки с некоторой переодичностью находятся в пределах верхней и нижней границ.
 
-4. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для случайного числа, принадлежащему массиву (число генерируется в каждом тесте) и построим график
+---
+4. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для случайного числа, принадлежащему массиву (число генерируется в каждом тесте) и построим график. C этого момента время задаём ```long double```.
 
 Полный код:
 ```C++
@@ -282,26 +282,79 @@ int main() {
     std::ofstream f("1.csv", std::ios::out);
     f << 0 << std::endl; // np считает первый элемент столбца его заголовком
 
+    std::ofstream l("2.csv", std::ios::out);
+    l << 0 << std::endl;
+    std::ofstream h("3.csv", std::ios::out);
+    h << 0 << std::endl;
+    std::ofstream c("4.csv", std::ios::out);
+    c << 0 << std::endl;
+
     int* arr = new int[1000000];
     FillWithOrderedValues(1000000, arr);
-    int s = 100000000;
+    int s = 500000;
 
-    for (unsigned size = 1000; size <= 1000000; size += 1000) {
+    for (unsigned size = 1000; size <= 1'000'000; size += 1000) {
         std::mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
-        auto time_span = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - std::chrono::steady_clock::now());
-        srand(time(NULL));
-        for (unsigned test = 1; test <= 100000; ++test) {
-        
-            s = rnd() % 1'000'000 + 1; // number to search
+        long double time_span = 0.0;
+        //std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - std::chrono::steady_clock::now())
+
+        long double t_low = 0;
+        long double t_high = 0;
+        long double t_c = 0;
+
+        //s = rnd() % 1'000'000 + 1; // number to search
+
+        for (int test = 1; test <= 100000; ++test) {
+            s = rnd() % size + 1; // number to search
+            //int* arr = new int[size];
+            int ss = 20000; 
+
+            //QuickSort(size, arr, false);
 
             auto begin = std::chrono::steady_clock::now();
+            //Search(s, size, arr);
             BinarySearch(s, arr, 0, size - 1);
+            //SearchSumm(s, size, arr);
+            //FastSearchSumm(s, arr, 0, size - 1);
             auto end = std::chrono::steady_clock::now();
 
-            time_span += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+            time_span += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+
+            begin = std::chrono::steady_clock::now();
+            BinarySearch(0, arr, 0, size - 1);
+            end = std::chrono::steady_clock::now();
+            t_high += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+
+            begin = std::chrono::steady_clock::now();
+            BinarySearch(10000000, arr, 0, size - 1);
+            end = std::chrono::steady_clock::now();
+            t_low += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+
+            begin = std::chrono::steady_clock::now();
+            BinarySearch(ss, arr, 0, size - 1);
+            end = std::chrono::steady_clock::now();
+            t_c += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+
+            //delete(arr);
         }
-        f << time_span.count() / 100000 << std::endl;
+        f << time_span / 100000 << std::endl;
+        h << t_high / 100000 << std::endl;
+        l << t_low / 100000 << std::endl;
+        c << t_c / 100000 << std::endl;
+
     }
     return 0;
 }
 ```
+
+![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_1/image6.png)
+
+Синие точки - случайные числа;
+
+Красные точки - верхняя граница;
+
+Зелёные точки - нижняя грнаица;
+
+Серые точки - поиск константы.
+
+Видим, что время поиска конкретного числа (серые точки) лежит в определённых границах. Какое бы конкретное число мы не задали, серые точки будут лежать в полученных гранцах. Можем сделать вывод, что среднее время поиска случайного числа также будет лежать в этих границах, однако по какой-то причине среднее время поиска случайных чисел превосходит верхнюю границу. Причиной может быть принцип работы mt19937. Возможно причина другая, не знаю (╯°□°）╯
