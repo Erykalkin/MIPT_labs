@@ -1,6 +1,8 @@
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=C+<+>)](https://git.io/typing-svg)
-# Лабораторная работа №1: Асимптотическая сложность
-### Цель:
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=C%2B%2B)](https://git.io/typing-svg)
+
+![header](https://capsule-render.vercel.app/api?type=waving&color=gradient&height=256&section=header&text=Лабораторная%20работа%20№2&fontSize=60&animation=fadeIn&fontAlignY=38&desc=Сортировки&descAlignY=60&descAlign=70&descSize=30)
+
+## Цель:
 проверить прямыми измерениями времени асимптотическую сложность алгоритмов по времени в зависимости от объёма данных.
 
 ## Пузырёк и его товарищи
@@ -148,7 +150,7 @@ $$\ln{t} = \ln{C} + k \cdot \ln{N}$$
 
 ![все](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_2/image9.png)
 
-Видим, что флаги -O1, -O2 и -O3 одинаково ускоряют работу программы В ДАННОМ СЛУЧАЕ. Флаг -O0 означает отсутствие оптимизации.
+Видим, что флаги -O1, -O2 и -O3 одинаково ускоряют работу программы в 3.8 раз В ДАННОМ СЛУЧАЕ. Флаг -O0 означает отсутствие оптимизации.
 
 
 
@@ -196,5 +198,4 @@ void SmartShakerSort(int n, int* arr) {
 3. 
 
 
-### Спасибо за внимание!
-![soft](https://capsule-render.vercel.app/api?type=soft&color=gradient&text=Спасибо%20за%20внимание!&fontSize=40&animation=twinkling)
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=Спасибо+за+внимание!)](https://git.io/typing-svg)
