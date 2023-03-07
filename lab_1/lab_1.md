@@ -249,7 +249,7 @@ int main() {
 Видим, что точки до размера массива 500'000 прижаты к нижней границе, так как ```s = 500'000``` для массивов размером меньше 500'000 является $+\infty$, затем точки с некоторой переодичностью находятся в пределах верхней и нижней границ.
 
 ---
-4. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для случайного числа, принадлежащему массиву (число генерируется в каждом тесте) и построим график. C этого момента время задаём ```long double```.
+4. Проанализируем работу алгоритма на упорядоченном масиве натуральных чисел от 1 до n для случайного числа, принадлежащему массиву (число генерируется в каждом тесте) и построим график. C этого момента время задаём ```long double``` (так сказал ментор).
 
 Полный код:
 ```C++
@@ -296,26 +296,17 @@ int main() {
     for (unsigned size = 1000; size <= 1'000'000; size += 1000) {
         std::mt19937 rnd(std::chrono::steady_clock::now().time_since_epoch().count());
         long double time_span = 0.0;
-        //std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - std::chrono::steady_clock::now())
 
         long double t_low = 0;
         long double t_high = 0;
         long double t_c = 0;
 
-        //s = rnd() % 1'000'000 + 1; // number to search
 
         for (int test = 1; test <= 100000; ++test) {
             s = rnd() % size + 1; // number to search
-            //int* arr = new int[size];
-            int ss = 20000; 
-
-            //QuickSort(size, arr, false);
 
             auto begin = std::chrono::steady_clock::now();
-            //Search(s, size, arr);
             BinarySearch(s, arr, 0, size - 1);
-            //SearchSumm(s, size, arr);
-            //FastSearchSumm(s, arr, 0, size - 1);
             auto end = std::chrono::steady_clock::now();
 
             time_span += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
@@ -331,11 +322,9 @@ int main() {
             t_low += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
 
             begin = std::chrono::steady_clock::now();
-            BinarySearch(ss, arr, 0, size - 1);
+            BinarySearch(20000, arr, 0, size - 1);
             end = std::chrono::steady_clock::now();
             t_c += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
-
-            //delete(arr);
         }
         f << time_span / 100000 << std::endl;
         h << t_high / 100000 << std::endl;
@@ -353,7 +342,7 @@ int main() {
 
 Красные точки - верхняя граница;
 
-Зелёные точки - нижняя грнаица;
+Зелёные точки - нижняя граница;
 
 Серые точки - поиск константы.
 
