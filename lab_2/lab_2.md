@@ -352,6 +352,8 @@ void median(int* array, int left, int right) {
 Видим, что алгоритм, использующий медиану медиан работает медленне.
 Оказывается, что умные люди не говорили, что он должен работать быстрее, они подразумевали, что так алгоритм всегда будет выполняться за $N \log{N}$.
 
+Также заметим, что обратноупорядоченный массив для этого алгоритма является одним из лучших случаев.
+
 А теперь посмотрим, какое преимущество давало бы использование медианы медиан, если бы на нахождение этой медианы не тратилось много времени. Для этого внутри функции медианы будем засекать время её работы, а затем вычитать это время из времени работы всего алгоритма.
 
 ![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_2/QuickRvsM.png)
@@ -368,5 +370,7 @@ void median(int* array, int left, int right) {
 ![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_2/ALL.png)
 
 ![](https://github.com/Erykalkin/MIPT_labs/blob/main/lab_2/FAST.png)
+
+
 
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=Спасибо+за+внимание!)](https://git.io/typing-svg)
