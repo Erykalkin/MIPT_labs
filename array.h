@@ -20,6 +20,7 @@ public:
   }
 
   Array(const Array& other) {
+    // конструктор копирования
     N = other.N;
     data = new T[N];
     for (unsigned int i = 0; i < N; ++i) {
